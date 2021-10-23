@@ -1,10 +1,12 @@
 package com.ryfazrin.mynoteapps
 
 import android.content.Context
+import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteOpenHelper
 import com.ryfazrin.mynoteapps.db.DatabaseContract.NoteColumns
 import com.ryfazrin.mynoteapps.db.DatabaseContract.NoteColumns.Companion.TABLE_NAME
 
-internal class DatabaseHelper(context: Context) {
+internal class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
 
     companion object {
 
@@ -17,5 +19,14 @@ internal class DatabaseHelper(context: Context) {
                 "${NoteColumns.TITLE} TEXT NOT NULL, " +
                 "${NoteColumns.DESCRIPTION} TEXT NOT NULL" +
                 "${NoteColumns.DATE} TEXT NOT NULL)"
+    }
+
+    override fun onCreate(db: SQLiteDatabase?) {
+        db?.execSQL(SQL_CREATE_TABLE_NOTE)
+    }
+
+    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
+        db?.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
+        onCreate(db)
     }
 }
