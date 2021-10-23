@@ -12,5 +12,11 @@ class NoteHelper(context: Context) {
 
     companion object {
         private const val DATABASE_TABLE = TABLE_NAME
+
+        private var INSTANCE: NoteHelper? = null
+        fun getInstance(context: Context): NoteHelper =
+            INSTANCE ?: synchronized(this) {
+                INSTANCE ?: NoteHelper(context)
+            }
     }
 }
