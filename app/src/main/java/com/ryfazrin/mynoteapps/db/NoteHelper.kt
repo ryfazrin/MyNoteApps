@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import com.ryfazrin.mynoteapps.DatabaseHelper
 import com.ryfazrin.mynoteapps.db.DatabaseContract.NoteColumns.Companion.TABLE_NAME
+import java.sql.SQLException
 
 class NoteHelper(context: Context) {
 
@@ -18,5 +19,16 @@ class NoteHelper(context: Context) {
             INSTANCE ?: synchronized(this) {
                 INSTANCE ?: NoteHelper(context)
             }
+    }
+
+    @Throws(SQLException::class)
+    fun open() {
+        database = databaseHelper.writableDatabase
+    }
+
+    fun close() {
+        databaseHelper.close()
+
+        if (database.isOpen) database.close()
     }
 }
