@@ -1,11 +1,14 @@
 package com.ryfazrin.mynoteapps.adapter
 
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.ryfazrin.mynoteapps.R
+import com.ryfazrin.mynoteapps.databinding.ItemNoteBinding
 import com.ryfazrin.mynoteapps.entity.Note
 
-class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
+class NoteAdapter(private val onItemClickCallback: OnItemClickCallback) : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
     var listNotes = ArrayList<Note>()
         set(listNotes) {
             if (listNotes.size > 0) {
@@ -31,19 +34,26 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteAdapter.NoteViewHolder {
-        TODO("Not yet implemented")
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_note, parent, false)
+        return NoteViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: NoteAdapter.NoteViewHolder, position: Int) {
-        TODO("Not yet implemented")
+    override fun onBindViewHolder(holder: NoteViewHolder, position: Int) {
+        holder.bind(listNotes[position])
     }
 
-    override fun getItemCount(): Int {
-        TODO("Not yet implemented")
-    }
+    override fun getItemCount(): Int = this.listNotes.size
 
     inner class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
+        private val binding = ItemNoteBinding.bind(itemView)
+        fun bind(note: Note) {
+            binding.tvItemTitle.text = note.title
+            binding.tvItemDate.text = note.date
+            binding.tvItemDescription.text = note.description
+            binding.cvItemNote.setOnClickListener {
+                onItemClickCallback.onItemClicked(note, adapterPosition)
+            }
+        }
     }
 
     interface OnItemClickCallback {
