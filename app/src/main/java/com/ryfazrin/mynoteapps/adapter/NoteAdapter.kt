@@ -14,6 +14,22 @@ class NoteAdapter : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
             this.listNotes.addAll(listNotes)
         }
 
+    fun addItem(note: Note) {
+        this.listNotes.add(note)
+        notifyItemInserted(this.listNotes.size - 1)
+    }
+
+    fun updateItem(position: Int, note: Note) {
+        this.listNotes[position] = note
+        notifyItemChanged(position, note)
+    }
+
+    fun removeItem(position: Int) {
+        this.listNotes.removeAt(position)
+        notifyItemRemoved(position)
+        notifyItemRangeChanged(position, this.listNotes.size)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteAdapter.NoteViewHolder {
         TODO("Not yet implemented")
     }
