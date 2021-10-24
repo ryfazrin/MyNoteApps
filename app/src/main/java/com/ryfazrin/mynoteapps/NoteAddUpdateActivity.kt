@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.ryfazrin.mynoteapps.databinding.ActivityNoteAddUpdateBinding
 import com.ryfazrin.mynoteapps.db.DatabaseContract
 import com.ryfazrin.mynoteapps.db.NoteHelper
@@ -144,5 +145,45 @@ class NoteAddUpdateActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onBackPressed() {
         showAlertDialog(ALERT_DIALOG_CLOSE)
+    }
+
+    private fun showAlertDialog(type: Int) {
+        val isDialogClose = type == ALERT_DIALOG_CLOSE
+        val dialogtitle: String
+        val dialogMessage: String
+
+        if (isDialogClose) {
+            dialogtitle = "Batal"
+            dialogMessage = "Apakah anda ingin membatalkan perubahan pada form?"
+        } else {
+            dialogMessage = "Apakah anda yakin ingin menghapus item ini?"
+            dialogtitle = "Hapus Note"
+        }
+
+        val alertDialogBuilder = AlertDialog.Builder(this)
+
+        alertDialogBuilder.setTitle(dialogtitle)
+        alertDialogBuilder
+            .setMessage(dialogMessage)
+            .setCancelable(false)
+            .setPositiveButton("Ya") { _, _ ->
+                if (isDialogClose) {
+                    finish()
+                } else {
+                    val result = noteHelper.deleteById(note?.id.toString()).toLong()
+                    if (result > 0) {
+                        val intent = Intent()
+                        intent.putExtra(EXTRA_POSITION, position)
+                        setResult(RESULT_DELETE, intent)
+                        finish()
+                    } else {
+                        Toast.makeText(this@NoteAddUpdateActivity, "Gagal menghapus data", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+            .setNegativeButton("Tidak") { dialog, _ -> dialog.cancel() }
+        
+        val alertDialog = alertDialogBuilder.create()
+        alertDialog.show()
     }
 }
