@@ -3,13 +3,20 @@ package com.ryfazrin.mynoteapps
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.ryfazrin.mynoteapps.adapter.NoteAdapter
 import com.ryfazrin.mynoteapps.databinding.ActivityMainBinding
+import com.ryfazrin.mynoteapps.db.NoteHelper
 import com.ryfazrin.mynoteapps.entity.Note
+import com.ryfazrin.mynoteapps.helper.MappingHelper
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -71,6 +78,30 @@ class MainActivity : AppCompatActivity() {
 
         binding.fabAdd.setOnClickListener {
             resultLaucher.launch(intent)
+        }
+
+        // proses ambil data
+        loadNotesAsync()
+    }
+
+    private fun loadNotesAsync() {
+        lifecycleScope.launch {
+            binding.progressbar.visibility = View.VISIBLE
+            val noteHelper = NoteHelper.getInstance(applicationContext)
+            noteHelper.open()
+            val deferredNotes = async(Dispatchers.IO) {
+                val cursor = noteHelper.queryAll()
+                MappingHelper.mapCursorToArrayList(cursor)
+            }
+            binding.progressbar.visibility = View.INVISIBLE
+            val notes = deferredNotes.await()
+            if (notes.size > 0) {
+                adapter.listNotes = notes
+            } else {
+                adapter.listNotes = ArrayList()
+                showSnackbarMessage("Tidak ada data saat ini")
+            }
+            noteHelper.close()
         }
     }
 
