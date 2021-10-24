@@ -141,4 +141,8 @@ class NoteAddUpdateActivity : AppCompatActivity(), View.OnClickListener {
         }
         return super.onOptionsItemSelected(item)
     }
+
+    override fun onBackPressed() {
+        showAlertDialog(ALERT_DIALOG_CLOSE)
+    }
 }
