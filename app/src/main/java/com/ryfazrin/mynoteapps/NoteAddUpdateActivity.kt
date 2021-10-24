@@ -2,7 +2,6 @@ package com.ryfazrin.mynoteapps
 
 import android.content.ContentValues
 import android.content.Intent
-import android.icu.text.SimpleDateFormat
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
