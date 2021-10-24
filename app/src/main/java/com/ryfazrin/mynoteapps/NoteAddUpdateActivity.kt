@@ -27,6 +27,39 @@ class NoteAddUpdateActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_note_add_update)
+        binding = ActivityNoteAddUpdateBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        noteHelper = NoteHelper.getInstance(applicationContext)
+        noteHelper.open()
+
+        note = intent.getParcelableExtra(EXTRA_NOTE)
+        if (note != null) {
+            position = intent.getIntExtra(EXTRA_POSITION, 0)
+            isEdit = true
+        } else {
+            note = Note()
+        }
+
+        val actionBarTitle: String
+        val btnTitle: String
+
+        if (isEdit) {
+            actionBarTitle = "Ubah"
+            btnTitle = "Update"
+
+            note?.let {
+                binding.edtTitle.setText(it.title)
+                binding.edtDescription.setText(it.description)
+            }
+        } else {
+            actionBarTitle = "Tambah"
+            btnTitle = "Simpan"
+        }
+
+        supportActionBar?.title = actionBarTitle
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        binding.btnSubmit.text = btnTitle
     }
 }
