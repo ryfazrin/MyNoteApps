@@ -5,6 +5,7 @@ import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
 import android.widget.Toast
 import com.ryfazrin.mynoteapps.databinding.ActivityNoteAddUpdateBinding
@@ -121,7 +122,14 @@ class NoteAddUpdateActivity : AppCompatActivity(), View.OnClickListener {
     private fun getCurrentDate(): String {
         val dateFormat = java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
         val date = Date()
-        
+
         return dateFormat.format(date)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        if (isEdit) {
+            menuInflater.inflate(R.menu.menu_form, menu)
+        }
+        return super.onCreateOptionsMenu(menu)
     }
 }
