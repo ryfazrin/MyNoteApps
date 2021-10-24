@@ -6,6 +6,7 @@ import android.icu.text.SimpleDateFormat
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import com.ryfazrin.mynoteapps.databinding.ActivityNoteAddUpdateBinding
@@ -131,5 +132,13 @@ class NoteAddUpdateActivity : AppCompatActivity(), View.OnClickListener {
             menuInflater.inflate(R.menu.menu_form, menu)
         }
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_delete -> showAlertDialog(ALERT_DIALOG_DELETE)
+            android.R.id.home -> showAlertDialog(ALERT_DIALOG_CLOSE)
+        }
+        return super.onOptionsItemSelected(item)
     }
 }
