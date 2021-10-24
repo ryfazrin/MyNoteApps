@@ -8,6 +8,7 @@
     tools:context=".MainActivity">
 
     <ProgressBar
+        android:id="@+id/progressbar"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:visibility="invisible"
