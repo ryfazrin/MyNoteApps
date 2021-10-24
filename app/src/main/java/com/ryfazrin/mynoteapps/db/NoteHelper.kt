@@ -73,7 +73,7 @@ class NoteHelper(context: Context) {
     }
 
     // Menghapus data.
-    fun delete(id: String): Int {
+    fun deleteById(id: String): Int {
         return database.delete(DATABASE_TABLE, "$_ID = '$id", null)
     }
 

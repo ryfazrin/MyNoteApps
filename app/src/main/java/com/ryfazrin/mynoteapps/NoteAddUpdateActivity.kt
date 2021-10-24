@@ -182,7 +182,7 @@ class NoteAddUpdateActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
             .setNegativeButton("Tidak") { dialog, _ -> dialog.cancel() }
-        
+
         val alertDialog = alertDialogBuilder.create()
         alertDialog.show()
     }
