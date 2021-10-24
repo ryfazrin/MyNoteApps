@@ -3,6 +3,7 @@ package com.ryfazrin.mynoteapps
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -55,6 +56,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    companion object {
+        private const val EXTRA_STATE = "extra_state"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -82,6 +87,16 @@ class MainActivity : AppCompatActivity() {
 
         // proses ambil data
         loadNotesAsync()
+
+        if (savedInstanceState == null) {
+            // proses ambil data
+            loadNotesAsync()
+        } else {
+            val list = savedInstanceState.getParcelableArrayList<Note>(EXTRA_STATE)
+            if (list != null) {
+                adapter.listNotes = list
+            }
+        }
     }
 
     private fun loadNotesAsync() {
@@ -103,6 +118,11 @@ class MainActivity : AppCompatActivity() {
             }
             noteHelper.close()
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelableArrayList(EXTRA_STATE, adapter.listNotes)
     }
 
     private fun showSnackbarMessage(message: String) {
