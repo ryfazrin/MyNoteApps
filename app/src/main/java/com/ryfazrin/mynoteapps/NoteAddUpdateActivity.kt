@@ -2,6 +2,7 @@ package com.ryfazrin.mynoteapps
 
 import android.content.ContentValues
 import android.content.Intent
+import android.icu.text.SimpleDateFormat
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -10,6 +11,7 @@ import com.ryfazrin.mynoteapps.databinding.ActivityNoteAddUpdateBinding
 import com.ryfazrin.mynoteapps.db.DatabaseContract
 import com.ryfazrin.mynoteapps.db.NoteHelper
 import com.ryfazrin.mynoteapps.entity.Note
+import java.util.*
 
 class NoteAddUpdateActivity : AppCompatActivity(), View.OnClickListener {
 
@@ -114,5 +116,12 @@ class NoteAddUpdateActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
         }
+    }
+
+    private fun getCurrentDate(): String {
+        val dateFormat = java.text.SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.getDefault())
+        val date = Date()
+        
+        return dateFormat.format(date)
     }
 }
